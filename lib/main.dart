@@ -19,7 +19,7 @@ const fileNames = <String>[
 Future<void> main() async {
   final List<Future> isolates = [];
   for (String f in fileNames) {
-    var i = await IsolateRunner.spawn();
+    final i = await IsolateRunner.spawn();
     isolates.add(i.run<void, MapEntry<String, File>>(
         solveHashCode2020, MapEntry(f, File('$inDir/$f'))));
   }

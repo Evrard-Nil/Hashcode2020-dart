@@ -72,16 +72,19 @@ abstract class Strategies {
     final orderedLibsByRATE = SplayTreeMap<int, List<Lib>>();
 
     for (Lib l in libs) {
-      final int score = l.scanRate * 10 + l.books.length - l.signUpTime * 5;
-      if (orderedLibsByRATE.containsKey(score)) {
-        orderedLibsByRATE[score].add(l);
+      l.updateTimeLeft(daysRemaining);
+      if (orderedLibsByRATE.containsKey(l.currentScore)) {
+        orderedLibsByRATE[l.currentScore].add(l);
       } else {
-        orderedLibsByRATE[score] = [l];
+        orderedLibsByRATE[l.currentScore] = [l];
       }
     }
 
     int tmpDays = daysRemaining;
-    for (List<Lib> ls in orderedLibsByRATE.values) {
+    for (int i = 1; i <= orderedLibsByRATE.length; i++) {
+      final ls = orderedLibsByRATE.values.elementAt(
+        orderedLibsByRATE.length - i,
+      );
       for (Lib l in ls) {
         l.removeScannedBooks(bookRemoved, bookScores);
         l.updateTimeLeft(tmpDays);
